@@ -7,21 +7,18 @@
 			
 			if( is_bool(($resultado = $this->validate($data))) ){
 				// true
-				echo 'resultado '.$resultado.'<br />';
-
-			}else{
-				// false
-				var_dump($resultado);
-			}
-
-			$this->string = array(
+				$this->string = array(
 				'tabla' => $data[0],
 				'campos' => array(
 								'id' => array('tipo' => $data[1],'pk' => $data[2]),
 								'nombre' => array('tipo' => $data[3], 'pk' => $data[4]),
 								'tipoUsuario' => array('tipo' => $data[5], 'values' =>$data[6])
 							)
-				);			
+				);
+			}else{
+				// false
+				var_dump($resultado);
+			}
 		}
 
 
@@ -48,11 +45,30 @@
 			if(count($errores) > 0){return $errores;}else{return true;}
 
 		}
-		public function select(){}
+
+		public function select(){
+			$parametros = func_get_args();
+			foreach ($parametros as $parametro => $valor) {
+				if(gettype($valor) != string){
+					echo 'no es string <br />';
+					echo $valor.'<br />';
+				}else{
+					
+				}
+			}
+			/*if(){
+				echo 'todo bien';
+			}else{				
+				echo gettype($parametros);
+			}*/
+
+		}
 		public function save(){}
 	}
 
-$c = new string('usuario',5,true,'gabriel',false,'content admin',2);
+//$d = new string(5,true,'nombre',false,'content admin',2,'usuario' );
+$c = new string('usuario',5,true,'nombre',false,'content admin',2);
 print_r('<br />');
-$d = new string(5,true,'gabriel',false,'content admin',2,'usuario' );
+$c->select('asd','46546',5,array(),4.3,false,'hola',32);
+
 ?>
