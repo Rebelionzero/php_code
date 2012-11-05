@@ -46,21 +46,33 @@
 
 		}
 
-		public function select(){
-			$parametros = func_get_args();
-			foreach ($parametros as $parametro => $valor) {
-				if(gettype($valor) != string){
-					echo 'no es string <br />';
-					echo $valor.'<br />';
-				}else{
-					
+		public function select($parametros){
+			$tipo = gettype($parametros);
+			if($tipo != 'string' && $tipo != 'array'){
+				echo 'solo se permiten arrays o strings como parametros';
+			}else{
+				if($tipo == 'string' && $parametros != '*'){
+					echo 'si ingresa un solo valor, este debe ser un string que obligatoriamente sea &#34;*&#34;';
+				}elseif($tipo == 'string' && $parametros == '*'){
+					// consulta exitosa
+					echo '<p>Se realizar&aacute; la siguiente consulta:</p>';
+					echo '<p>SELECT * from '.$this->string["tabla"].'</p>';
+				}elseif($tipo == 'array' && count($parametros) != 2){
+					// continuar aca
 				}
 			}
-			/*if(){
-				echo 'todo bien';
-			}else{				
-				echo gettype($parametros);
-			}*/
+
+			/*foreach ($parametros as $parametro => $valor) {
+				if(gettype($valor) != 'string'){					
+					echo $valor.' no es string <br />';					
+				}else{
+					if($valor != '*' && $valor != 'id' && $valor != 'tipoUsuario'){
+						echo '<p>los valores ingresados son incorrectos, solo se permiten: &#34;*&#34;, &#34;id&#34; y &#34;tipoUsuario&#34;</p>';
+					}else{
+						echo '<p>Bien hecho!!!</p>';
+					}
+				}
+			}*/			
 
 		}
 		public function save(){}
@@ -68,7 +80,6 @@
 
 //$d = new string(5,true,'nombre',false,'content admin',2,'usuario' );
 $c = new string('usuario',5,true,'nombre',false,'content admin',2);
-print_r('<br />');
-$c->select('asd','46546',5,array(),4.3,false,'hola',32);
+$c->select('*');
 
 ?>
