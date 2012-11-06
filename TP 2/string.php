@@ -51,14 +51,20 @@
 			if($tipo != 'string' && $tipo != 'array'){
 				echo 'solo se permiten arrays o strings como parametros';
 			}else{
-				if($tipo == 'string' && $parametros != '*'){
-					echo 'si ingresa un solo valor, este debe ser un string que obligatoriamente sea &#34;*&#34;';
-				}elseif($tipo == 'string' && $parametros == '*'){
-					// consulta exitosa
-					echo '<p>Se realizar&aacute; la siguiente consulta:</p>';
-					echo '<p>SELECT * from '.$this->string["tabla"].'</p>';
-				}elseif($tipo == 'array' && count($parametros) != 2){
-					// continuar aca
+				if($tipo == 'string'){
+					if($parametros != '*'){
+						echo 'si ingresa un solo valor, este debe ser un string que obligatoriamente sea &#34;*&#34;';
+					}else{
+						// consulta exitosa
+						echo '<p>Se realizar&aacute; la siguiente consulta:</p>';
+						echo '<p>SELECT * from '.$this->string["tabla"].'</p>';
+					}
+				}elseif($tipo == 'array'){
+					$largo_array = count($parametros);
+					if($largo_array != 2){
+						echo 'debe ingrsar solo 2 parametros en el array';
+						// continuar aca
+					}	
 				}
 			}
 
