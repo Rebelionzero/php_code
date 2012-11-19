@@ -1,8 +1,8 @@
 <?php
 
 	interface Istring {
-
-		public function select();
-		public function save();
+		public function __construct();
+		 function validate($array);
+		public function select($parametros);
+		public function save($array);
 	}
-?>
