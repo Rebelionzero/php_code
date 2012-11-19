@@ -6,27 +6,23 @@ include_once('/../interfaces/Istring.php');
 
 		public function __construct(){
 			$data = func_get_args();
-			
 			if( is_bool(($resultado = $this->validate($data))) ){
-				// true
-				
+				// true				
 				$this->string = array(
-				'tabla' => $data[0],
-				'campos' => array(
-								'id' => array('tipo' => $data[1],'pk' => $data[2]),
-								'nombre' => array('tipo' => $data[3], 'pk' => $data[4]),
-								'tipoUsuario' => array('tipo' => $data[5], 'values' =>$data[6])
-							)
+					'tabla' => $data[0],
+					'campos' => array(
+						'id' => array('tipo' => $data[1],'pk' => $data[2]),
+						'nombre' => array('tipo' => $data[3], 'pk' => $data[4]),
+						'tipoUsuario' => array('tipo' => $data[5], 'values' =>$data[6])
+					)
 				);				
-				
 			}else{
 				// false
 				var_dump($resultado);
 			}
 		}
 
-
-		 function validate($array){
+		function validate($array){
 			$validacion = array(
 				'tabla'		 => ((!is_string($array[0])) ? 'Error: el campo tabla debe ser un string' : true),
 				'id'		 => ((!is_numeric($array[1])) ? 'Error: el id debe ser un numero' : true),
@@ -36,9 +32,8 @@ include_once('/../interfaces/Istring.php');
 				'tipoUsuario'=> ((!is_string($array[5])) ? 'Error: el tipo de usuario debe ser un string' : true),
 				'values'	 => ((!is_numeric($array[6])) ? 'Error: el valor de usuario debe ser un numero' : true)
 			);
-			
-			$errores = array();
 
+			$errores = array();
 			foreach($validacion as $valor => $item){
 				if(is_bool($item)){
 					continue;
@@ -47,7 +42,6 @@ include_once('/../interfaces/Istring.php');
 				}
 			}
 			if(count($errores) > 0){return $errores;}else{return true;}
-
 		}
 
 		public function select($parametros){
@@ -68,7 +62,6 @@ include_once('/../interfaces/Istring.php');
 					if($largo_array != 2){
 						echo 'Error: debe ingrsar solo 2 parametros en el array';
 					}else{
-
 						if($parametros[0] != 'id'){
 							echo 'Error: el primer parametro debe ser &#34;id&#34;';
 						}else{
@@ -79,60 +72,75 @@ include_once('/../interfaces/Istring.php');
 								// excepcion
 							}
 						}
-
 					}
 				}
 			}
 		}
-
 		
 		public function save($array){
-			$cantidad = count($array);			
+			$cantidad = count($array);
 			$errores = array();
-
 			if (gettype($array) != 'array') {
 				echo 'Error: solo puede ingresar un array como parametro';
 			}else{
-
 				if ($cantidad == 3){
 					// revisar que los 3 parametros sean correctos
-					$validacion = array(
-						'id'				 => ((!is_numeric($array['id'])) ? 'Error: el primer campo debe ser un numero' : true),
-						'tipoUsuario'		 => ((!is_numeric($array['tipoUsuario'])) ? 'Error: el segundo campo debe ser un numero' : true),
-						'nombre'			 => ((!is_string($array['nombre'])) ? 'Error: el tercer campo debe ser un string' : true)
-					);
-
-					foreach ($validacion as $llave => $valor) {
-						if($valor){continue;}else{echo('<p>'.$valor.'</p>');array_push($errores, true);}
-					}
-
-					if (!count($errores) > 0) {
-						if ($array['id'] != $this->string['campos']['id']['tipo']) {
-							echo 'Error: El id ingresado no corresponde con ninguno de la base de datos';
+					if (!array_key_exists('id',$array)) {
+						echo 'Error: las clave id del array debe estar presente';
+					} else {
+						if(!array_key_exists('tipoUsuario',$array)) {
+							echo 'Error: las clave tipoUsuario del array debe estar presente';
 						}else{
-							// exito
-							echo '<p>Se realizar&aacute; la siguiente consulta:</p>';
-							echo '<p>UPDATE usuario SET tipoUsuario=&#34;'.$array['tipoUsuario'].'&#34;,
-							nombre=&#34;'.$array['nombre'].'&#34; WHERE id=&#34;'.$array['id'].'&#34;</p>';
+							if(!array_key_exists('nombre',$array)) {
+								echo 'Error: las clave nombre del array debe estar presente';
+							}else{
+								
+								$validacion = array(
+									'id'			 => ((!is_numeric($array['id'])) ? 'Error: el primer campo debe ser un numero' : true),
+									'tipoUsuario'	 => ((!is_numeric($array['tipoUsuario'])) ? 'Error: el segundo campo debe ser un numero' : true),
+									'nombre'		 => ((!is_string($array['nombre'])) ? 'Error: el tercer campo debe ser un string' : true)
+								);
+								
+								foreach ($validacion as $llave => $valor) {
+									if($valor){continue;}else{echo('<p>'.$valor.'</p>');array_push($errores, true);}
+								}
+
+								if (!count($errores) > 0) {
+									if ($array['id'] != $this->string['campos']['id']['tipo']) {
+										echo 'Error: El id ingresado no corresponde con ninguno de la base de datos';
+									}else{
+										// exito
+										echo '<p>Se realizar&aacute; la siguiente consulta:</p>';
+										echo '<p>UPDATE usuario SET tipoUsuario=&#34;'.$array['tipoUsuario'].'&#34;,nombre=&#34;'.$array['nombre'].'&#34; WHERE id=&#34;'.$array['id'].'&#34;</p>';
+									}
+								}
+							}
 						}
-						
 					}
-
-				}
-
-				if ($cantidad == 2){
+				}	
+			
+				if ($cantidad == 2){					
 					// revisar que los 2 parametros sean correctos
+					if(!array_key_exists('tipoUsuario',$array)){
+						echo 'Error: las clave tipoUsuario del array debe estar presente';
+					}else{
+						if(!array_key_exists('nombre',$array)){
+							echo 'Error: las clave nombre del array debe estar presente';
+						}else{
+							$validacion = array(						
+								'tipoUsuario'		 => ((!is_numeric($array['tipoUsuario'])) ? 'Error: el primer campo debe ser un numero' : true),
+								'nombre'			 => ((!is_string($array['nombre'])) ? 'Error: el segundo campo debe ser un string' : true)
+							);
+						}
+					}
 				}
-
-
 			}
 		}
-
-
 	}
 
 //$d = new string(5,true,'nombre',false,'content admin',2,'usuario' );
 $c = new string('usuario',5,true,'nombre',false,'content admin',2);
 //$c->select('*');
 //$c->select(array('id','ad'));
-$c->save(array('id' => 5, 'tipoUsuario' => 2, 'nombre' => 'juan'));
+//$c->save(array('id' => 5, 'tipoUsuario' => 2, 'nombre' => 'juan'));
+$c->save(array('tipoUsuario' => 2, 'nombre' => 'juan'));
