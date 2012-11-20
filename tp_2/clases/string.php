@@ -131,6 +131,18 @@ include_once('/../interfaces/Istring.php');
 								'tipoUsuario'		 => ((!is_numeric($array['tipoUsuario'])) ? 'Error: el primer campo debe ser un numero' : true),
 								'nombre'			 => ((!is_string($array['nombre'])) ? 'Error: el segundo campo debe ser un string' : true)
 							);
+							
+							foreach ($validacion as $llave => $valor) {
+								if($valor){continue;}else{echo('<p>'.$valor.'</p>');array_push($errores, true);}
+							}
+							
+							if (!count($errores) > 0) {
+								// exito
+								echo '<p>Se realizar&aacute; la siguiente consulta:</p>';
+								echo '<p>INSERT INTO usuario VALUES( null , '.$array['tipoUsuario'].' , "'.$array['nombre'].'" )</p>';
+							}else{
+								var_dump($errores);
+							}
 						}
 					}
 				}
